@@ -25,7 +25,7 @@ public class Main {
 	public static List<String> list4 = new ArrayList<>();
 	public static List<String> list5 = new ArrayList<>();
 
-	public static JSONObject jo = null;
+	public static JSONObject jo = null; 
 
 	////////////////////// min_temp ,max //////cities with rain array
 //	public static Triplet<String, String, List<String>> tripletOne = new Triplet<String, String, List<String>>("", "",
@@ -35,7 +35,8 @@ public class Main {
 	static TripletWeather tw3 = new TripletWeather("", "", list3);
 	static TripletWeather tw4 = new TripletWeather("", "", list4);
 	static TripletWeather tw5 = new TripletWeather("", "", list5);
-
+	
+	public static List<TripletWeather> tripleList = new ArrayList<TripletWeather>();
 	private static double firstMin_temp = 0;
 	private static double firstMax_temp = 0;
 
@@ -46,7 +47,7 @@ public class Main {
 	public static void main(String[] args) {
 		BufferedReader reader;
 		String line;
-		String[] cities = { "New York" ,"Berlin"};
+		String[] cities = { "New York" ,"Berlin","Jerusalem","Dubai","Lisbon","Paris","Seoul","Singapore","Athens","Oslo"};
 
 		try {
 			for (int k = 0; k < cities.length; k++) {
@@ -89,8 +90,26 @@ public class Main {
 				System.out.println("tw1 " + tw1.getCountryMax() + tw1.getCountryMin() + "" + tw1.getList() + "\n");
 				System.out.println("tw5 " + tw5.getCountryMax() + tw5.getCountryMin() + "" + tw5.getList() + "\n");
 				System.out.println("tw2 " + tw2.getCountryMax() + tw2.getCountryMin() + "" + tw2.getList() + "\n");
+				
+			
+				
+				
+				
+//			
+				
 
 			}
+			
+			System.out.println(tw5.countryMax + " "+tw5.list);
+			tripleList.add(tw1);
+			tripleList.add(tw2);
+			tripleList.add(tw3);
+			tripleList.add(tw4);
+			tripleList.add(tw5);
+			System.out.println((tripleList.size()));
+			WriteCsv.write(tripleList);
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
