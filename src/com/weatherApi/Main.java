@@ -19,39 +19,44 @@ import java.net.*;
 
 public class Main {
 	public static HttpURLConnection connection;
-	public static List<String> list = new ArrayList<>();
-	public static JSONObject jo = null;
-	
-	////////////////////// min_temp ,max //////cities with rain array
-	public static Triplet<String, String, List<String>> tripletOne = new Triplet<String, String, List<String>>("", "",
-			list);
-	static TripletWeather tw1 = new TripletWeather("", "", list);
-	static TripletWeather tw2 = new TripletWeather("", "", list);
-	static TripletWeather tw3 = new TripletWeather("", "", list);
-	static TripletWeather tw4 = new TripletWeather("", "", list);
-	static TripletWeather tw5 = new TripletWeather("", "", list);
-	
+	public static List<String> list1 = new ArrayList<>();
+	public static List<String> list2 = new ArrayList<>();
+	public static List<String> list3 = new ArrayList<>();
+	public static List<String> list4 = new ArrayList<>();
+	public static List<String> list5 = new ArrayList<>();
 
-	private static double firstMin_temp = 293.66;
-	private static double firstMax_temp = 292.12;
-	
-	
-	public static String cityName =null;
-	public static StringBuffer responseContent = new StringBuffer();
-	
-	
+	public static JSONObject jo = null;
+
+	////////////////////// min_temp ,max //////cities with rain array
+//	public static Triplet<String, String, List<String>> tripletOne = new Triplet<String, String, List<String>>("", "",
+//			list);
+	static TripletWeather tw1 = new TripletWeather("", "", list1);
+	static TripletWeather tw2 = new TripletWeather("", "", list2);
+	static TripletWeather tw3 = new TripletWeather("", "", list3);
+	static TripletWeather tw4 = new TripletWeather("", "", list4);
+	static TripletWeather tw5 = new TripletWeather("", "", list5);
+
+	private static double firstMin_temp = 0;
+	private static double firstMax_temp = 0;
+
+	public static String city = "New York";
+	public static String cityName = null;
+//	public static StringBuffer responseContent = new StringBuffer();
+
 	public static void main(String[] args) {
 		BufferedReader reader;
 		String line;
-		String[] cities = {"New York","Berlin"};
+		String[] cities = { "New York" ,"Berlin"};
+
 		try {
-			for (String city : cities) {
+			for (int k = 0; k < cities.length; k++) {
 				jo = null;
-				 
-				URL url = new URL("http://api.openweathermap.org/data/2.5/forecast?q=" + city
+				StringBuffer responseContent = new StringBuffer();
+			
+				URL url = new URL("http://api.openweathermap.org/data/2.5/forecast?q=" + cities[k]
 						+ "&cnt=5&appid=a3f20118eead94533603b9665190dd88");
 				connection = (HttpURLConnection) url.openConnection();
-				System.out.println("cuty " + city);
+				System.out.println("cuty " + cities[k]);
 				connection.setRequestMethod("GET");
 				connection.setConnectTimeout(5000);
 				connection.setReadTimeout(5000);
@@ -65,21 +70,25 @@ public class Main {
 						responseContent.append(line);
 
 					}
-					//reader.close();
+					// reader.close();
 				} else {
 					reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 					while ((line = reader.readLine()) != null) {
 						responseContent.append(line);
 					}
 
-					//reader.close();
+					// reader.close();
 
 				}
 
 				System.out.println(responseContent.toString());
 
 				parse(responseContent.toString());
-				Thread.sleep(1200);
+			
+
+				System.out.println("tw1 " + tw1.getCountryMax() + tw1.getCountryMin() + "" + tw1.getList() + "\n");
+				System.out.println("tw5 " + tw5.getCountryMax() + tw5.getCountryMin() + "" + tw5.getList() + "\n");
+				System.out.println("tw2 " + tw2.getCountryMax() + tw2.getCountryMin() + "" + tw2.getList() + "\n");
 
 			}
 		} catch (Exception e) {
@@ -91,67 +100,196 @@ public class Main {
 	}
 
 	public static String parse(String responseBody) throws InterruptedException {
-	
-		
-		try{System.out.println("res "+responseBody);
-	
-		
-		System.out.println("jo1 "+jo);
-	  jo = new JSONObject(responseBody);
-	
-	  System.out.println("jo "+jo);
-	  
-		
-		if(!jo.isEmpty()) {
-		  jo.remove(jo.keys().next());}
 
-	  
+		try {
+			System.out.println("res " + responseBody);
+
+			System.out.println("jo1 " + jo);
+			jo = new JSONObject(responseBody);
+
+//	  System.out.println("jo "+jo);
+
 //	    System.out.println("jo "+jo);
-//		JSONObject cityOBJ = jo.getJSONObject("city");
-//		System.out.println(cityOBJ);
-//		cityName = cityOBJ.get("name").toString();
-		
-//		JSONArray listArray = jo.getJSONArray("list");
-//		for (int i = 0; i < listArray.length(); i++) {
-//			JSONObject listObject = listArray.getJSONObject(i);
-//			JSONObject main = listObject.getJSONObject("main");
-//
-//			JSONObject weather = listObject.getJSONArray("weather").getJSONObject(0);
-//			String weatherMain = weather.getString("main");
-//			String weatherDesc = weather.getString("description");
-////		JSONObject rain = listObject.getJSONObject("rain");
-//		
-//			
-//			System.out.println("city name ");
-//			System.out.println(main.get("temp_min") + "index " + i);
-//			System.out.println(main.get("temp_max") + "index of max " + i);
-//
-//			switch (i) {
-//			case 0:
-//
-//				if (firstMin_temp > main.getDouble("temp_min")) {
-//					firstMin_temp = main.getDouble("temp_min");
-//					tw1.setCountryMin(cityName);
-//				}
-//
-//				if (firstMax_temp < main.getDouble("temp_max")) {
-//					firstMax_temp = main.getDouble("temp_max");
-//					tw1.setCountryMax(cityName);
-//				}
-//				if (listObject.has("rain")) {
-//					list.add(cityName);
-//				}
-//
-//				System.out.println("max "+ tw1.getCountryMin());
-//				break;
-//
-//			}
-//
-//		}
-		
-		return null;
-		}catch(Exception e ) {
+			JSONObject cityOBJ = jo.getJSONObject("city");
+			System.out.println("cityobj " + cityOBJ);
+			cityName = cityOBJ.get("name").toString();
+			System.out.println(cityName);
+
+			JSONArray listArray = jo.getJSONArray("list");
+			for (int i = 0; i < listArray.length(); i++) {
+				JSONObject listObject = listArray.getJSONObject(i);
+				JSONObject main = listObject.getJSONObject("main");
+
+				JSONObject weather = listObject.getJSONArray("weather").getJSONObject(0);
+				String weatherMain = weather.getString("main");
+				String weatherDesc = weather.getString("description");
+				JSONObject rain=  new JSONObject();
+				if(listObject.has("rain")){
+					System.out.println("rain exiasts");
+				 rain= listObject.getJSONObject("rain");
+				}
 			
+				System.out.println("city name ");
+				System.out.println(main.get("temp_min") + "index " + i);
+				System.out.println(main.get("temp_max") + "index of max " + i);
+
+				
+				
+				
+				if(cityName.equals("New York")) {
+					firstMax_temp = main.getDouble("temp_max");
+					firstMin_temp = main.getDouble("temp_min");
+					tw1.setCountryMin(cityName);
+
+					tw1.setCountryMax(cityName);
+
+				
+					
+					tw2.setCountryMin(cityName);
+
+					tw2.setCountryMax(cityName);
+
+//					list2.add(cityName);
+					
+					tw3.setCountryMin(cityName);
+
+					tw3.setCountryMax(cityName);
+
+//					list3.add(cityName);
+					
+					tw4.setCountryMin(cityName);
+
+					tw4.setCountryMax(cityName);
+
+//					list4.add(cityName);
+					
+					
+					tw5.setCountryMin(cityName);
+
+					tw5.setCountryMax(cityName);
+
+//					list5.add(cityName);
+					
+				}
+				
+				
+				
+				
+				
+				
+				switch (i) {
+				case 0:
+					if(firstMin_temp >main.getDouble("temp_min")) {
+						tw1.setCountryMin(cityName);
+
+					
+
+				
+					}
+					
+					if(firstMax_temp <main.getDouble("temp_max")) {
+						
+						tw1.setCountryMax(cityName);
+					}
+					if(!rain.isEmpty()) {
+						list1.add(cityName);
+						tw1.setList(list1);
+					}
+					
+					
+					
+					break;
+
+				case 1:
+
+					if(firstMin_temp >main.getDouble("temp_min")) {
+						tw2.setCountryMin(cityName);
+
+					
+
+				
+					}
+					
+					if(firstMax_temp <main.getDouble("temp_max")) {
+						
+						tw2.setCountryMax(cityName);
+					}
+					if(!rain.isEmpty()) {
+						list2.add(cityName);
+						tw2.setList(list2);
+					}
+					
+
+					break;
+
+				case 2:
+					if(firstMin_temp >main.getDouble("temp_min")) {
+						tw3.setCountryMin(cityName);
+
+					
+
+				
+					}
+					
+					if(firstMax_temp <main.getDouble("temp_max")) {
+						
+						tw3.setCountryMax(cityName);
+					}
+					if(!rain.isEmpty()) {
+						list3.add(cityName);
+						tw3.setList(list3);
+					}
+					
+					break;
+
+				case 3:
+					if(firstMin_temp >main.getDouble("temp_min")) {
+						tw4.setCountryMin(cityName);
+
+					
+
+				
+					}
+					
+					if(firstMax_temp <main.getDouble("temp_max")) {
+						
+						tw4.setCountryMax(cityName);
+					}
+					if(!rain.isEmpty()) {
+						list4.add(cityName);
+						tw4.setList(list4);
+					}
+					
+					break;
+
+				case 4:
+					if(firstMin_temp >main.getDouble("temp_min")) {
+						tw5.setCountryMin(cityName);
+
+					
+
+				
+					}
+					
+					if(firstMax_temp <main.getDouble("temp_max")) {
+						
+						tw5.setCountryMax(cityName);
+					}
+					if(!rain.isEmpty()) {
+						list5.add(cityName);
+						tw5.setList(list5);
+					}
+					
+					break;
+
+				}
+
+			}
+
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+
 		}
 		return responseBody;
 	}
